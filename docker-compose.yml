@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  rabbitmq3:
+    container_name: "rabbitmq"
+    image: rabbitmq:3.9-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=david
+      - RABBITMQ_DEFAULT_PASS=pass
+    ports:
+      # AMQP protocol port
+      - '5672:5672'
+      # HTTP management UI
+      - '15672:15672'
+  facture:
+    container_name: "facture"
+    build: ./facture
+    ports:
+      - '8081:8081'
+  reservation:
+    container_name: "reservation"
+    build: ./reservation
+    ports:
+      - '8082:8082'
+  apigateway:
+    container_name: "apigateway"
+    build: ./apigateway
+    ports:
+      - '8080:8080'
