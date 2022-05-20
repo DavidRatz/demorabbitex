@@ -23,7 +23,7 @@ public class ReservationService {
     private MessageSender sender;
     @Autowired
     private RestTemplate template;
-    private final String urlFacture = "http://localhost:8081/facture/";
+    private final String urlFacture = "lb://facture-service/facture/";
 
     public void create(Reservation reservation){
         

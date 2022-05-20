@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -18,7 +20,7 @@ import be.technifutur.reservation.rabbit.MessageSender;
 import be.technifutur.reservation.services.ReservationService;
 
 @RestController
-@RequestMapping("/reservation")
+@RequestMapping("/reservation") 
 public class ReservationController {
     @Autowired
     private ReservationService service;
@@ -29,15 +31,22 @@ public class ReservationController {
         service.create(reservation.map());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/facture")
     public ResponseEntity<List<Reservation>> getReservationFacture(){
         return ResponseEntity.ok(service.getResvFactures());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/ref")
     public ResponseEntity<ReservationDTO> getReservationAndFacture(@RequestParam UUID ref) throws Exception{
         return ResponseEntity.ok(service.getReservationPriceFromFacture(ref));
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/user")
+    public String getNomUser(Authentication auth){
+        return "votre nom est: " + auth.getPrincipal();
+    }
 
 }

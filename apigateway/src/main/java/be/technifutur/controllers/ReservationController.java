@@ -9,7 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,8 +20,7 @@ public class ReservationController {
     @Autowired
     private RestTemplate template;
 
-    private final String url = "http://localhost:8082/reservation/";
-    private final String urlFacture = "http://localhost:8081/facture/";
+    private final String url = "http://reservation:8082/reservation/";
 
     @PostMapping
     public ResponseEntity<?> askForReserv(@RequestBody Map<String, String> request){
@@ -32,7 +31,7 @@ public class ReservationController {
         return response;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @GetMapping
     public ResponseEntity<?> getAllReservFacture(){
         ResponseEntity<?> response = template.getForEntity(url + "facture", List.class);
@@ -40,7 +39,7 @@ public class ReservationController {
         return response;
     }
 
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @GetMapping("/ref")
     public ResponseEntity<?> getReservAndFacture(@RequestParam Object request){
         ResponseEntity<Object> reservFact =  template.getForEntity(url + "ref?ref="+request, Object.class);

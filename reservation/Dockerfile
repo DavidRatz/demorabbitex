@@ -1,6 +1,4 @@
-FROM maven:3.6.1-jdk-8-alpine
-WORKDIR /app
-COPY . /app
-RUN mvn package
-EXPOSE 8082
-CMD ["mvn", "spring-boot:run"]
+FROM openjdk:17
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]

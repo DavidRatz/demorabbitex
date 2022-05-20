@@ -1,0 +1,64 @@
+spring:
+    application:
+        name: apigatewayv2-service
+    profiles:
+        active: dev
+    config:
+        import: configserver:http://root:s3cr3t@localhost:8888
+    cloud:
+    #     consul:
+    #         host: localhost
+    #         port: 8500
+    #         discovery:
+    #             service-name: ${spring.application.name}
+    #             instance-id: ${spring.application.name}:${random.uuid}
+
+        gateway:
+            routes:
+                -   id: to-facture
+                    uri: lb://facture-service
+                    predicates:
+                        - Path=/facture/**
+                        - Method=GET,POST
+                # -   id: to-reservation
+                #     uri: lb://reservation-service
+                #     predicates:
+                #         - Path=/reservation/**
+                #         - Method=GET,POST
+                -   id: reserv-add
+                    uri: lb://reservation-service
+                    predicates:
+                        - Path=/reservation/add
+                        - Method=POST
+                    filters:
+                        -   name: Logger
+                -   id: reserv-ref
+                    uri: lb://reservation-service
+                    predicates:
+                        - Path=/reservation/ref
+                        -   name: NumberOfParams
+                            args:
+                                equals: 1
+                        #- Query=ref,.......-....-....-....-............
+                        - Query=ref,^[A-Za-z0-9]{8}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{4}-[A-Za-z0-9]{12}$
+                    filters:
+                        #-   name: Secured
+                        -   name: Logger
+                -   id: reserv-user
+                    uri: lb://reservation-service
+                    predicates:
+                        - Path=/reservation/user
+                        - Method=GET
+                    filters:
+                        -   name: Secured
+                        -   name: Logger
+                -   id: login
+                    uri: lb://user-service
+                    predicates:
+                        - Path=/login
+                        - Method=POST
+                    filters:
+                        - name: Logger
+            discovery:
+                locator:
+                    enabled: true

@@ -1,3 +1,8 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.project.sourcePaths": [
+        "configurationserver/src/main/resources",
+        "configurationserver/src/main/java",
+        "configurationserver/src/test/java"
+    ]
 }

@@ -1,6 +1,10 @@
 version: "3.9"
+
+networks:
+  back-end:
+    driver: bridge
 services:
-  rabbitmq3:
+  rabbitmq:
     container_name: "rabbitmq"
     image: rabbitmq:3.9-management-alpine
     environment:
@@ -11,18 +15,67 @@ services:
       - '5672:5672'
       # HTTP management UI
       - '15672:15672'
+    networks:
+      - back-end
   facture:
     container_name: "facture"
     build: ./facture
     ports:
       - '8081:8081'
+    depends_on:
+      - rabbitmq
+      - consul-server
+    networks:
+      - back-end
   reservation:
     container_name: "reservation"
     build: ./reservation
     ports:
       - '8082:8082'
-  apigateway:
-    container_name: "apigateway"
-    build: ./apigateway
+    depends_on:
+      - rabbitmq
+      - consul-server
+    networks:
+      - back-end
+  user:
+    container_name: "user"
+    build: ./user
+    ports:
+      - '8083:8083'
+    depends_on:
+      - consul-server
+    networks:
+      - back-end
+  # apigateway:
+  #   container_name: "apigateway"
+  #   build: ./apigateway
+  #   ports:
+  #     - '8080:8080'
+  #   networks:
+  #     - back-end
+  #   depends_on:
+  #     - reservation
+  #     - facture
+  apigateway-2:
+    container_name: "apigateway-2"
+    build: ./ApiGatewayV2
     ports:
       - '8080:8080'
+    networks:
+      - back-end
+    depends_on:
+      - consul-server
+  consul-server:
+    container_name: "consul-server"
+    image: consul
+    ports:
+      - "8500:8500"
+    networks:
+      - back-end
+  configurationserver:
+    container_name: "configurationserver"
+    build: ./configurationserver
+    ports:
+      - '8888:8888'
+    networks:
+      - back-end
