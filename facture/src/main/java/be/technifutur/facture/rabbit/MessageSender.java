@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import be.technifutur.facture.*;
 import be.technifutur.facture.models.Facture;
 
-@Component
+//@Component
 public class MessageSender implements InitializingBean{
     @Autowired
     private RabbitTemplate rabbitTemplate;

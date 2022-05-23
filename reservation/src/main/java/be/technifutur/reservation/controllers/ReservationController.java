@@ -25,6 +25,7 @@ public class ReservationController {
     @Autowired
     private ReservationService service;
 
+    @PreAuthorize("permitAll()")
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
     public void addReservation(@RequestBody ReservForm reservation) throws JsonProcessingException{

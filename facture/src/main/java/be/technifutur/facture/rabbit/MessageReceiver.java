@@ -19,7 +19,7 @@ import be.technifutur.facture.models.Facture;
 import be.technifutur.facture.models.Reservation;
 import be.technifutur.facture.services.FactureService;
 
-@Component
+//@Component
 public class MessageReceiver {
 
     private Logger log = LoggerFactory.getLogger(MessageReceiver.class);
@@ -28,7 +28,7 @@ public class MessageReceiver {
     @Autowired
     private FactureService service;
 
-    @RabbitListener(queues = "reservation_queue")
+    //@RabbitListener(queues = "reservation_queue")
     public void receiveReservation(String message) throws JsonProcessingException{
         // ObjectMapper mapper = new ObjectMapper();
         Reservation r = mapper.readValue(message, Reservation.class);

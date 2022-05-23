@@ -22,7 +22,7 @@ public class ReservationService {
     @Autowired
     private MessageSender sender;
     @Autowired
-    private RestTemplate template;
+    private RestTemplate restTemplate;
     private final String urlFacture = "lb://facture-service/facture/";
 
     public void create(Reservation reservation){
@@ -55,7 +55,7 @@ public class ReservationService {
 
     public ReservationDTO getReservationPriceFromFacture(UUID ref) throws Exception {
         Double price = 0D;
-        ResponseEntity<Facture> f = template.getForEntity(urlFacture + "ref?reserv_ref=" + ref, Facture.class);
+        ResponseEntity<Facture> f = restTemplate.getForEntity(urlFacture + "ref?reserv_ref=" + ref, Facture.class);
         if(f.getStatusCode() == HttpStatus.OK)
             price = f.getBody().getPrix();
         else

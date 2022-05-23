@@ -11,16 +11,17 @@ import be.technifutur.facture.rabbit.MessageSender;
 @Service
 public class FactureService {
     private final List<Facture> list = new ArrayList<>();
-    @Autowired
-    private MessageSender sender;
+    // @Autowired
+    // private MessageSender sender;
 
-    public void createFacture(int nbrNuit, UUID reserv_ref){
+    public Facture createFacture(int nbrNuit, UUID reserv_ref){
         double priceByNight = 50.0d;
         double totalPrice = priceByNight*nbrNuit;
         Facture facture = new Facture(totalPrice, reserv_ref);
         list.add(facture);
 
-        sender.sendFactureToReservation(facture);
+        //sender.sendFactureToReservation(facture);
+        return facture;
     }
 
     public List<Facture> getFactures(){

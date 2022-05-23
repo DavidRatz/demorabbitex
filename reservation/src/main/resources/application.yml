@@ -6,20 +6,44 @@ spring:
     #     port: 5672
     #     username: david
     #     password: pass
-    application:
-      name: reservation-service
-    profiles:
-      active: dev
-    config:
-      import: configserver:http://root:s3cr3t@localhost:8888
-    # cloud:
-    #     consul:
-    #         host: localhost
-    #         port: 8500
-    #         discovery:
-    #             service-name: ${spring.application.name}
-    #             instance-id: ${spring.application.name}:${random.uuid}
-                        # health-check-path: "/actuator/health"
+  application:
+    name: reservation-service
+  profiles:
+    active: dev
+  config:
+    import: configserver:http://root:s3cr3t@localhost:8888
+  cloud:
+    stream:
+      # binders:
+      #   rabbit:
+      #     type: rabbit
+      #     environment:
+      #       spring:
+      #         rabbitmq:
+      #             host: localhost
+      #             port: 5672
+      #             username: guest
+      #             password: guest
+      #             virtual-host: /
+      function:
+        definition: reccevoirfacture
+      bindings:
+        reccevoirfacture-in-0:
+          destination: messages.facture
+          binder: rabbit
+          group: facture
+        envoireservation-out-0:
+          destination: messages.reservation
+          binder: rabbit
+          group: reservation
+        
+  #     consul:
+  #         host: localhost
+  #         port: 8500
+  #         discovery:
+  #             service-name: ${spring.application.name}
+  #             instance-id: ${spring.application.name}:${random.uuid}
+                      # health-check-path: "/actuator/health"
 # management:
 #   endpoints:
 #     web:

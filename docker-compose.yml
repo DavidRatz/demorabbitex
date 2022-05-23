@@ -7,9 +7,9 @@ services:
   rabbitmq:
     container_name: "rabbitmq"
     image: rabbitmq:3.9-management-alpine
-    environment:
-      - RABBITMQ_DEFAULT_USER=david
-      - RABBITMQ_DEFAULT_PASS=pass
+    # environment:
+    #   - RABBITMQ_DEFAULT_USER=david
+    #   - RABBITMQ_DEFAULT_PASS=pass
     ports:
       # AMQP protocol port
       - '5672:5672'

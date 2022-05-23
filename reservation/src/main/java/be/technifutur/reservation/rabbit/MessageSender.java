@@ -14,22 +14,28 @@ import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Component;
 
 import be.technifutur.reservation.*;
 import be.technifutur.reservation.models.entities.Reservation;
 import be.technifutur.reservation.models.entities.Reservation.Status;
 import be.technifutur.reservation.services.ReservationService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 public class MessageSender implements InitializingBean{
-    private Logger log = LoggerFactory.getLogger(MessageSender.class);
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    //private Logger log = LoggerFactory.getLogger(MessageSender.class);
+    // @Autowired
+    // private RabbitTemplate rabbitTemplate;
     @Autowired
     private ObjectMapper mapper;
     // @Autowired
     // private ReservationService service;
+    
+    @Autowired
+    private StreamBridge streamBridge;
 
     public void sendReservationToFacture(Reservation reservation) throws JsonProcessingException
     {
@@ -38,11 +44,13 @@ public class MessageSender implements InitializingBean{
         // rabbitTemplate.send("topic.facture", "facture.compta",message);
 
        // rabbitTemplate.convertAndSend("topic.facture", "facture.compta",json);
-       String reservJson = mapper.writeValueAsString(reservation);
-       Message m = MessageBuilder.withBody(reservJson.getBytes())
-                .setContentType("application/json")
-                .build();
-       rabbitTemplate.send("direct.messages", "reservation",m);
+    //    String reservJson = mapper.writeValueAsString(reservation);
+    //    Message m = MessageBuilder.withBody(reservJson.getBytes())
+    //             .setContentType("application/json")
+    //             .build();
+        log.info("Reservation send : "+ reservation);
+        streamBridge.send("envoireservation-out-0", reservation);
+       //rabbitTemplate.send("direct.messages", "reservation",m);
     }
 
     @Override

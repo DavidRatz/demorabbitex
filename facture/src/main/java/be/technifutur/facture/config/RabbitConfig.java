@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+//@Configuration
 public class RabbitConfig {
 
     // @Bean
@@ -18,17 +18,17 @@ public class RabbitConfig {
     //     return new ObjectMapper().registerModule(new JavaTimeModule());
     // }
 
-    @Bean
+    //@Bean
     public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory){
         return new RabbitAdmin(connectionFactory);
     }
 
-    @Bean("facture_queue")
+    //@Bean("facture_queue")
     public Queue factureQueue(){
         return new Queue("facture_queue");
     }
 
-    @Bean("reservation_queue")
+    //@Bean("reservation_queue")
     public Queue reservationQueue(){
         return new Queue("reservation_queue", true);
     }
@@ -44,7 +44,7 @@ public class RabbitConfig {
     // }
 
     
-    @Bean
+    //@Bean
     public DirectExchange directExchange(){
         return new DirectExchange("direct.messages");
     }
@@ -54,7 +54,7 @@ public class RabbitConfig {
     //     return BindingBuilder.bind(queue).to(exchange).with("facture");
     // }
 
-    @Bean
+    //@Bean
     public Binding rBind(DirectExchange exchange, @Qualifier("reservation_queue") Queue queue){
         return BindingBuilder.bind(queue).to(exchange).with("reservation");
     }
